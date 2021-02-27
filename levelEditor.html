@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			Level Editor 
+		</title>
+		
+		<style>
+			body {
+				padding: 0px;
+				margin: 0px;
+				background-color: #2b385e;
+			}
+			
+			header {
+				background-color: #011246;
+				padding: 20px;
+				margin: 0px;
+				height: 15vh;
+			}
+			
+			section {
+				padding: 20px;
+				margin: 0px;
+				width: 80vw;
+			}
+			
+			footer {
+				background-color: #2e323e;
+				padding: 20px;
+				margin: 0px;
+				height: 15vh;
+			}
+			
+			h1 {
+				font-family: arial;
+				color: white;
+			}
+			
+			h2 {
+				font-family: arial;
+				color: white;
+			}
+			
+			h3 {
+				font-family: arial;
+				color: white;
+			}
+			
+			h4 {
+				font-family: arial;
+				color: white;
+			}
+			
+			h5 {
+				font-family: arial;
+				color: white;
+			}
+			
+			h6 {
+				font-family: arial;
+				color: white;
+			}
+			
+			p {
+				font-family: arial;
+				color: white;
+			}
+			
+			canvas {
+				background-color: lightblue;
+				cursor: pointer;
+			}
+			
+			center {
+				padding: 10px;
+				margin: 0px;
+			}
+			
+			.propertyMenu {
+				padding: 20px;
+			}
+			
+			.controlPanel {
+				background-color: #2a213e;	
+				margin: 10px;
+				overflow-x: hidden;
+				overflow-y: auto;
+				max-height: 20vw;
+				min-width: 80vw;
+			}
+			
+			.tileSelect {
+				width: 48px;
+				height: 48px;
+				background-color: #001030;
+				padding: 5px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<header>
+			<center>
+				<h1>
+					Level Editor
+				</h1>
+			</center>
+		</header>
+		
+		<div class="propertyMenu">
+			<center>
+				<h2>
+					Set Level Properties
+				</h2>
+				
+				<br/>
+			
+				<h3>
+					Level width (tiles): 
+				</h3>
+		
+				<input id="levelWidthInput" value=50 type="number" min=20 max=10000></input>
+				
+				<br/>
+				
+				<br/>
+				
+				<button onclick="changeWidth()">
+					Change Width
+				</button>
+				
+				<br/>
+				
+				<br/>
+			
+				<h3>
+					Level Height (tiles): 
+				</h3>
+		
+				<input id="levelHeightInput" value=50 type="number" min=20 max=10000></input>
+				
+				<br/>
+				
+				<br/>
+				
+				<button onclick="changeHeight()">
+					Change Height
+				</button>
+				
+				<br/>
+				
+				<br/>
+				
+				<h2>
+					Level Name:
+				</h2>
+				
+				<br/>
+				
+				<input value="level1" id="levelNameInput"></input>
+				
+				<br/>
+				
+				<br/>
+				
+				<h2>
+					Export Level to File
+				</h2>
+				
+				<br/>
+				
+				<button onclick="downloadLevel()">
+					Download Level File
+				</button>
+				
+				<br/>
+				
+				<br/>
+				
+				<h2>
+					Load Level From File
+				</h2>
+				
+				<br/>
+				
+				<input type="file" id="levelUploadInput" onchange="uploadLevel()" style="color:white"></input>
+			
+				<br/>
+				
+				<br/>
+				
+				<div class="controlPanel">
+					<h2>
+						Tools
+					</h2>
+					
+					<br/>
+					
+					<button onclick="setTool(0)">
+						Pen (Place Tiles With the Mouse)
+					</button>
+					
+					<br/>
+					
+					<br/>
+					
+					<button onclick="setTool(1)">
+						Fill (Fill an Area With Tiles)
+					</button>
+					
+					<br/>
+					
+					<br/>
+				</div>
+				
+				<br/>
+				
+				<br/>
+				
+				<br/>
+				
+				<button onclick="goToCentre()">
+					Return To Centre of Map
+				</button>
+			</center>
+		</div>
+		
+		<center>
+			<section id="mainSection">
+				<canvas id="myCanvas"></canvas>
+		
+				<div class="controlPanel" id="controlPanel">
+					<center>
+						<h2>
+							Tiles
+						</h2>
+					</center>
+
+					<br/>
+					
+					<hr/>
+					
+					<br/>
+					
+					<h3>
+						Eraser
+					</h3>
+					
+					<br/>
+					
+					<button class="tileSelect" onclick="setTile(0)">
+						
+					</button>
+					
+					<br/>
+					
+					<hr/>
+					
+					<br/>
+					
+					
+					<h3>
+						Solid Tiles
+					</h3>
+					
+					<br/>
+					
+					<button class="tileSelect" onclick="setTile(2)">
+						<img src="src/tiles/2.png"></img>
+					</button>
+					
+					<button class="tileSelect" onclick="setTile(3)">
+						<img src="src/tiles/3.png"></img>
+					</button>
+					
+					<button class="tileSelect" onclick="setTile(4)">
+						<img src="src/tiles/4.png"></img>
+					</button>
+					
+					<br/>
+					
+					<hr/>
+					
+					<br/>
+					
+					<h3>
+						Background Tiles
+					</h3>
+					
+					<br/>
+					
+					<button class="tileSelect" onclick="setTile(1)">
+						<img src="src/tiles/1.png"></img>
+					</button>
+					
+					<button class="tileSelect" onclick="setTile(5)">
+						<img src="src/tiles/5.png"></img>
+					</button>
+					
+					
+					<br/>
+					
+					<hr/>
+					
+					<br/>
+					
+					<h3>
+						Spawn Tiles
+					</h3>
+					
+					<br/>
+					
+					<button class="tileSelect">
+						
+					</button>
+					
+					<br/>
+					
+					<hr/>
+					
+					<br/>
+				</div>
+			</section>
+		</center>
+		
+		<footer>
+		
+		</footer>
+		
+		<script src="jqueryMain.js">
+		</script>
+		
+		<script>
+			/*
+				Tiles List:
+				0 : empty
+				1 : grass
+				2 : top stone wall
+				3 : left stone wall 
+				4 : right stone wall
+				5 : top of wall
+			*/
+			
+			//load images 
+			function loadImage(img, src){
+				img.src = src;
+				img.onload = () => {
+					console.log("Image " + src + " loaded");
+				};
+			};
+			
+			//load tile images 
+			var tileImages = [];
+		
+			//define tile number 
+			var tileNumber = 6;
+			
+			//fill tile images array 
+			for(let i = 0; i < tileNumber; i++){
+				tileImages.push(new Image());
+				loadImage(tileImages[i], "src/tiles/" + i + ".png");
+			};
+			
+			//load canvas 
+			var canvas = document.getElementById("myCanvas");
+			var ctx = canvas.getContext("2d");
+			
+			//load level upload input 
+			var levelUploadInput = document.getElementById("levelUploadInput");
+			
+			//load section 
+			var mainSection = document.getElementById("mainSection");
+			
+			//load control panel 
+			var controlPanel = document.getElementById("controlPanel");
+			
+			//set canvas width and height 
+			canvas.width = (mainSection.clientWidth - 20)
+			canvas.height = Math.round(window.innerHeight * 0.7);
+			
+			//get width and height values 
+			var levelWidthInput = document.getElementById("levelWidthInput");
+			var levelHeightInput = document.getElementById("levelHeightInput");
+			
+			//get level width and height 
+			var levelWidth = levelWidthInput.value;
+			var levelHeight = levelHeightInput.value;
+			
+			//set tile size 
+			var tileSize = 32;
+			
+			//set tile 
+			var tileToPlace = 1;
+			
+			//set tool 
+			var tool = 0;
+			
+			//set scrollX and Y
+			var scrollX = 0;
+			var scrollY = 0;
+			
+			//set hovered tile 
+			var hoveredTile = -1;
+			
+			//create input object 
+			var input = {
+				mouseX: 0,
+				mouseY: 0,
+				mouse: false,
+				mouseOnCanvas: false,
+			};
+			
+			//create level 
+			var level = [];
+			
+			for(let i = 0; i < levelWidth * levelHeight; i++){
+				level.push(0);
+			};
+			
+			//render horizontal lines 
+			function renderHorizontalLines(){
+				//set colours 
+				ctx.strokeStyle = "#aaaaaa";
+				ctx.lineWidth = 4;
+				
+				//iterate rows
+				for(let i = 0; i <= levelHeight; i++){
+					ctx.beginPath();
+					ctx.moveTo(0, i * tileSize);
+					ctx.lineTo(levelWidth * tileSize, i * tileSize);
+					ctx.stroke();
+					ctx.closePath();
+				};
+			};
+			
+			//render vertical lines 
+			function renderVerticalLines(){
+				//set colours 
+				ctx.strokeStyle = "#aaaaaa";
+				ctx.lineWidth = 2;
+				
+				//iterate rows
+				for(let i = 0; i <= levelWidth; i++){
+					ctx.beginPath();
+					ctx.moveTo(i * tileSize, 0);
+					ctx.lineTo(i * tileSize, levelHeight * tileSize);
+					ctx.stroke();
+					ctx.closePath();
+				};
+			};
+			
+			//calculate tile index 
+			function calculateTileIndex(x,y){
+				let rows = Math.floor(y / tileSize);
+				let columns = Math.floor(x / tileSize);
+				let index = rows * levelWidth + columns;
+				
+				if(index >= 0 && index <= levelWidth * levelHeight){
+					return index;
+				} else {
+					return -1;
+				};
+			};
+			
+			//set tile 
+			function setTile(t){
+				tileToPlace = t;
+			};
+			
+			//set tool 
+			function setTool(t){
+				tool = t;
+			};
+			
+			//change width 
+			function changeWidth(){
+				//check that new dimensions are valid 
+				if(levelWidthInput.value % 1 != 0){
+					alert("Error - All dimensions must be integers.");
+				} else if(levelWidthInput.value < 20){
+					alert("Error - All dimensions must be larger than 20 tiles.");
+				} else if(levelWidth.value > 5000){
+					alert("Error - All dimensions must be smaller than 5000.");
+				} else {
+					//change width
+					let widthDifference = levelWidthInput.value - levelWidth;
+					
+					if(widthDifference > 0){
+						//map has gotten wider 
+						var levelSubArrays = [];
+						
+						//break array down into array 
+						for(let i = 0; i < levelHeight; i++){
+							levelSubArrays.push(level.slice(i * levelHeight, (i+1) * levelHeight));
+						};
+						
+						//add onto array
+						for(let i = 0; i < levelHeight; i++){
+							//add onto right
+							for(let j = 0; j < Math.floor(widthDifference / 2); j++){
+								levelSubArrays[i].unshift(0);
+							};
+							
+							//add onto left 
+							for(let j = 0; j < Math.ceil(widthDifference / 2); j++){
+								levelSubArrays[i].push(0);
+							};
+							
+							//console.log(levelSubArrays[i].length);
+						};
+						
+						//add subarray back to array 
+						level = [];
+						
+						for(let i = 0; i < levelSubArrays.length; i++){
+							for(let j = 0; j < levelSubArrays[i].length; j++){
+								level.push(levelSubArrays[i][j]);
+							};
+						};
+			
+						levelWidth = levelWidthInput.value;
+					} else if(widthDifference < 0) {
+						//map has gotten wider 
+						var levelSubArrays = [];
+						
+						//break array down into array 
+						for(let i = 0; i < levelHeight; i++){
+							levelSubArrays.push(level.slice(i * levelHeight, (i+1) * levelHeight));
+						};
+						
+						//add onto array
+						for(let i = 0; i < levelHeight; i++){
+							//add onto right
+							for(let j = 0; j < Math.floor(Math.abs(widthDifference) / 2); j++){
+								levelSubArrays[i].shift();
+							};
+							
+							//add onto left 
+							for(let j = 0; j < Math.ceil(Math.abs(widthDifference) / 2); j++){
+								levelSubArrays[i].pop();
+							};
+							
+							//console.log(levelSubArrays[i].length);
+						};
+						
+						//add subarray back to array 
+						level = [];
+						
+						for(let i = 0; i < levelSubArrays.length; i++){
+							for(let j = 0; j < levelSubArrays[i].length; j++){
+								level.push(levelSubArrays[i][j]);
+							};
+						};
+			
+						levelWidth = levelWidthInput.value;
+					};
+				};
+			};
+			
+			//change size 
+			function changeHeight(){
+				//check that new dimensions are valid 
+				if(levelHeightInput.value % 1 != 0){
+					alert("Error - All dimensions must be integers.");
+				} else if(levelHeightInput.value < 20){
+					alert("Error - All dimensions must be larger than 20 tiles.");
+				} else if(levelHeightInput.value > 5000){
+					alert("Error - All dimensions must be smaller than 5000.");
+				} else {
+					//change height 
+					let heightDifference = levelHeightInput.value - levelHeight;
+					
+					if(heightDifference > 0){
+						//map has gotten taller
+						for(let i = 0; i < Math.floor(heightDifference / 2); i++){
+							for(let j = 0; j < levelWidth; j++){
+								level.unshift(0);
+							};
+						};
+						
+						for(let i = 0; i < Math.ceil(heightDifference / 2); i++){
+							for(let j = 0; j < levelWidth; j++){
+								level.push(0);
+							};
+						};
+						
+						//set new height 
+						levelHeight = levelHeightInput.value;
+					} else if(heightDifference < 0){
+						//map has gotten shorter
+						if(confirm("Shrinking your map will remove some tiles. Are you okay with this?") == true){
+							//decrease size 
+							//map has gotten taller
+							for(let i = 0; i < Math.floor(Math.abs(heightDifference) / 2); i++){
+								for(let j = 0; j < levelWidth; j++){
+									level.shift();
+								};
+							};
+							
+							for(let i = 0; i < Math.ceil(Math.abs(heightDifference) / 2); i++){
+								for(let j = 0; j < levelWidth; j++){
+									level.pop();
+								};
+							};
+							
+							//set new height 
+							levelHeight = levelHeightInput.value;
+						};
+					};
+				};
+				
+				//change height 
+				
+			};
+			
+			//calculate adjacent tiles 
+			function calculateAdjacentTiles(tileIndex){
+				//create tiles array 
+				tilesArray = [tileIndex];
+				
+				//set no change
+				var noEdits = false;
+				
+				//determine type 
+				tileType = level[tileIndex];
+
+				//iterate until no edits are made 
+				while(noEdits == false){
+					//reset noEdits
+					noEdits = true;
+					
+					//iterate through tilesArray 
+					let tilesToAdd = [];
+					
+					for(let i = 0; i < tilesArray.length; i++){
+						//check if adjacent tiles are of the same type 
+						
+						//check left 
+						if(tilesArray[i] % levelWidth != 0){
+							if(level[tilesArray[i] - 1] == tileType){
+								if(tilesArray.indexOf(tilesArray[i] - 1) == -1){
+									//console.log(tilesArray[i] - 1);
+									tilesToAdd.push(tilesArray[i] - 1);
+									noEdits = false;
+								};
+							};
+						};
+						
+						//check right 
+						if(tilesArray[i] % levelWidth != levelWidth - 1){
+							if(level[tilesArray[i] + 1] == tileType){
+								if(tilesArray.indexOf(tilesArray[i] + 1) == -1){
+									tilesToAdd.push(tilesArray[i] + 1);
+									noEdits = false;
+								};
+							};
+						};
+						
+						//check down
+						if(tilesArray[i] < level.length - parseInt(levelWidth)){
+							if(level[parseInt(tilesArray[i]) + parseInt(levelWidth)] == tileType){
+								if(tilesArray.indexOf(parseInt(tilesArray[i]) + parseInt(levelWidth)) == -1){
+									//console.log(tilesArray[i] - 1);
+									tilesToAdd.push(parseInt(tilesArray[i]) + parseInt(levelWidth));
+									noEdits = false;
+								};
+							};
+						};
+						
+						//check up
+						if(tilesArray[i] >= parseInt(levelWidth)){
+							if(level[tilesArray[i] - parseInt(levelWidth)] == tileType){
+								if(tilesArray.indexOf(parseInt(tilesArray[i]) - parseInt(levelWidth)) == -1){
+									//console.log(tilesArray[i] - 1);
+									tilesToAdd.push(parseInt(tilesArray[i]) - parseInt(levelWidth));
+									noEdits = false;
+								};
+							};
+						};
+					};
+					
+					//add tiles to add 
+					for(let i = 0; i < tilesToAdd.length; i++){
+						if(tilesArray.indexOf(tilesToAdd[i]) == -1){
+							tilesArray.push(tilesToAdd[i]);
+						};
+					};
+					
+					//console.log(tilesArray);
+					//console.log(noEdits);
+				};
+				
+				//console.log(tilesArray);
+				return tilesArray;
+			};
+			
+			//create main loop 
+			function mainLoop(){
+				//clear screen
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				
+				//update scroll
+				if(input.mouseOnCanvas && input.mouseX > canvas.width * 0.8 && input.mouseX < canvas.width){
+					scrollX -= ((input.mouseX - canvas.width * 0.8) / canvas.width * 0.2) * 100;
+				} else if(input.mouseOnCanvas && input.mouseX < canvas.width * 0.2 && input.mouseX > 0){
+					scrollX += ((canvas.width * 0.2 - input.mouseX) / canvas.width * 0.2) * 100;
+				};
+				
+				if(input.mouseOnCanvas && input.mouseY > canvas.height * 0.8 && input.mouseY < canvas.height){
+					scrollY -= ((input.mouseY - canvas.height * 0.8) / canvas.height * 0.2) * 100;
+				} else if(input.mouseOnCanvas && input.mouseY < canvas.height * 0.2 && input.mouseY > 0){
+					scrollY += ((canvas.height * 0.2 - input.mouseY) / canvas.height * 0.2) * 100;
+				};
+				
+				//translate 
+				ctx.translate(scrollX, scrollY);
+				
+				//calcuate mouse tile index 
+				hoveredTile = calculateTileIndex(input.mouseX-scrollX, input.mouseY-scrollY);
+				
+				//reset tile coordinates
+				tileX = tileSize / 2;
+				tileY = tileSize / 2;
+				
+				//render tiles 
+				for(let i = 0; i < level.length; i++){
+					//decide what tile to draw 
+					ctx.drawImage(tileImages[level[i]], tileX - tileSize / 2, tileY - tileSize / 2);
+					
+					//draw cursor 
+					if(hoveredTile == i){
+						ctx.globalAlpha = 0.75;
+						ctx.fillStyle = "red";
+						ctx.fillRect(tileX - tileSize / 2, tileY - tileSize / 2, tileSize, tileSize);
+						ctx.globalAlpha = 1;
+					};
+					
+					//move along 
+					tileX += tileSize;
+					
+					if(tileX >= tileSize * levelWidth){
+						tileX = tileSize / 2;
+						tileY += tileSize;
+					};
+				};
+				
+				//draw grid 
+				renderHorizontalLines();
+				renderVerticalLines();
+				
+				//place tiles 
+				if(input.mouseOnCanvas && input.mouse && calculateTileIndex(input.mouseX-scrollX, input.mouseY-scrollY) > -1){
+					//decide tool 
+					if(tool == 0){
+						//pen
+						level[calculateTileIndex(input.mouseX-scrollX, input.mouseY-scrollY)] = tileToPlace;
+					} else if(tool == 1){
+						//fill 
+						let fillTiles = calculateAdjacentTiles(calculateTileIndex(input.mouseX-scrollX, input.mouseY-scrollY));
+						
+						for(let i = 0; i < fillTiles.length; i++){
+							level[fillTiles[i]] = tileToPlace; 
+						};
+					};
+				};
+				
+				//reset transform
+				ctx.resetTransform();
+				
+				//call next frame 
+				requestAnimationFrame(mainLoop);
+			};
+			
+			//mouse down 
+			document.addEventListener("mousedown", ()=>{
+				input.mouse = true;
+			});
+			
+			//mouse up
+			document.addEventListener("mouseup", ()=>{
+				input.mouse = false;
+			});
+			
+			//mouse move handler 
+			document.addEventListener("mousemove", (e)=>{
+				//set x and y 
+				input.mouseX = e.clientX - canvas.offsetLeft + $(document).scrollLeft();
+				input.mouseY = e.clientY - canvas.offsetTop + $(document).scrollTop();
+				//input.mouseX = e.pageX;
+				//input.mouseY = e.pageY;
+			});
+			
+			//mouse enter 
+			canvas.addEventListener("mouseenter", ()=>{
+				input.mouseOnCanvas = true;
+			});
+			
+			//mouse leave
+			canvas.addEventListener("mouseleave", ()=>{
+				input.mouseOnCanvas = false;
+			});
+			
+			//set resize event
+			window.addEventListener("resize",()=>{
+				//set canvas width and height 
+				canvas.width = (mainSection.clientWidth - 20)
+				canvas.height = Math.round(window.innerHeight * 0.7);
+			});
+			
+			//download level file 
+			function downloadLevel(){
+				let fileName = document.getElementById("levelNameInput").value + ".level";
+				let fileContent = levelWidth + "\n" + levelHeight + "\n" + level;
+				let element = document.createElement("a");
+				element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(fileContent));
+				element.setAttribute("download", fileName);
+				element.style.display = "none";
+				document.body.appendChild(element);
+				element.click();
+				document.body.removeChild(element);
+			};
+			
+			//upload level 
+			function uploadLevel(){
+				var file = levelUploadInput.files[0];
+				//console.log(levelUploadInput.files[0]);
+				
+				//check that file is of the correct type 
+				if(levelUploadInput.files[0].name.substring(levelUploadInput.files[0].name.indexOf("."), levelUploadInput.files[0].name.length) == ".level"){
+					//read file contents 
+					var reader = new FileReader();
+					
+					//create lines array 
+					var lines = [];
+					
+					reader.onload = function(progressEvent){
+						//get each line 
+						lines = this.result.split("\n");
+						
+						//use lines [0] for width 
+						levelWidthInput.value = lines[0];
+						
+						//use lines[1] for height 
+						levelHeightInput.value = lines[1];
+						
+						//change width and height 
+						changeWidth();
+						changeHeight();
+						
+						//read level 
+						level = lines[2].split(",");
+					};
+					
+					//read file as text 
+					reader.readAsText(file);
+				} else {
+					alert("Error - That file is not of the correct type! Please submit .level files only.");
+				};
+			};
+			
+			//go to centre 
+			function goToCentre(){
+				scrollX = -levelWidth * tileSize / 2;
+				scrollY = -levelHeight * tileSize / 2;
+			};
+			
+			//start mainloop 
+			mainLoop();
+		</script>
+	</body>
+</html>
